@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>AP Bio Review</title>
+<meta name="description" content="AP Biology review for all eight units: study guides, practice questions, flashcards, free-response prompts and a timed final exam.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,100..900&family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=DM+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+<script>window.EMBED_VIDEOS=true</script>
+</head>
+<body>
+<header class="bar" id="top">
+  <div class="bar-in">
+    <a class="mark" href="#intro" id="mark">AP Bio</a>
+    <div class="tabs" role="tablist" aria-label="Study modes" id="tabs">
+      <span class="pill" aria-hidden="true" id="pill"></span>
+      <button class="tab" role="tab" data-view="guide" id="tab-guide"><span class="lg">Study </span>Guide</button>
+      <button class="tab" role="tab" data-view="videos" id="tab-videos"><span class="lg">Videos</span><span class="sm">Vids</span></button>
+      <button class="tab" role="tab" data-view="practice" id="tab-practice">Practice</button>
+      <button class="tab" role="tab" data-view="cards" id="tab-cards"><span class="lg">Flashcards</span><span class="sm">Cards</span></button>
+      <button class="tab" role="tab" data-view="frq" id="tab-frq"><span class="lg">Free Response</span><span class="sm">FRQ</span></button>
+      <button class="tab" role="tab" data-view="exam" id="tab-exam"><span class="lg">Final </span>Exam</button>
+    </div>
+    <button class="mode" id="motion" type="button" aria-pressed="false">
+      <span id="motionIcon" aria-hidden="true"></span>
+      <span id="motionName"></span>
+    </button>
+    <button class="mode" id="mode" type="button" aria-label="Switch microscope mode">
+      <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 2a8 8 0 0 1 0 16z" fill="currentColor"/></svg>
+      <span id="modeName"></span>
+    </button>
+  </div>
+</header>
+
+<section class="intro" id="intro">
+  <div class="stage" id="stage" aria-hidden="true">
+    <canvas id="field"></canvas>
+  </div>
+  <div class="hero" id="hero">
+    <div class="hero-in">
+      <h1 id="heroTitle"><span class="ln"><span>AP Bio,</span></span> <span class="ln"><span>molecule to</span></span> <span class="ln"><span>biosphere</span></span></h1>
+      <p class="lede" id="lede"></p>
+      <div class="cta">
+        <button class="btn solid" id="ctaStart" type="button"></button>
+        <button class="btn" id="ctaExam" type="button">Take the final exam</button>
+      </div>
+      <p class="count" id="countdown"></p>
+    </div>
+    <div class="scale" id="scale" aria-live="polite">
+      <span class="scale-bar"></span>
+      <span class="scale-v" id="scaleV"></span>
+      <span class="scale-t" id="scaleT"></span>
+    </div>
+    <div class="strip" id="strip"></div>
+  </div>
+  <div class="steps" id="steps"></div>
+</section>
+
+<section class="study" id="study">
+  <div class="poster" id="poster"></div>
+  <div class="layout" id="layout">
+    <aside class="rail" id="rail" data-lenis-prevent></aside>
+    <main class="view" id="view"></main>
+  </div>
+  <footer class="foot">
+    <div class="foot-in">
+      <p>Topics and exam format follow the College Board's AP Biology Course and Exam Description, effective Fall 2025. Practice questions are original and aren't from College Board. AP is a trademark of College Board, which isn't affiliated with this page.</p>
+      <p>Videos are by <a href="https://www.youtube.com/@poseknowsbio" target="_blank" rel="noopener">Gabe Poser, PoseKnows Biology</a>, and come from YouTube. Gabe Poser isn't affiliated with this page.</p>
+      <p>Your answers and notes are saved only in this browser.</p>
+    </div>
+  </footer>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/motion@11.18.2/dist/motion.js"></script>
+<script src="js/data.js"></script>
+<script src="js/units/u1.js"></script>
+<script src="js/units/u2.js"></script>
+<script src="js/units/u3.js"></script>
+<script src="js/units/u4.js"></script>
+<script src="js/units/u5.js"></script>
+<script src="js/units/u6.js"></script>
+<script src="js/units/u7.js"></script>
+<script src="js/units/u8.js"></script>
+<script src="js/exam.js"></script>
+<script src="js/videos.js"></script>
+<script src="js/field.js"></script>
+<script src="js/app.js"></script>
+<script src="js/examview.js"></script>
+</body>
+</html>
