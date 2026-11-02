@@ -29,6 +29,42 @@ const BLURB=["",
 "Energy flow, populations, communities, and what disrupts an ecosystem."];
 const VIEW_NAME={guide:"Study guide",videos:"Videos",practice:"Practice questions",cards:"Flashcards",frq:"Free response",exam:"Final exam"};
 const plural=(n,w)=>`${n} ${w}${n===1?"":"s"}`;
+// Unit 4 assessment start times, counted down on the viewer's clock.
+const U4_TEST=[
+  {who:"Block G",y:2026,m:11,d:22,h:7,min:30},
+  {who:"Block B",y:2026,m:11,d:22,h:11,min:15},
+  {who:"Block C",y:2026,m:11,d:22,h:13,min:0},
+  {who:"Block F",y:2026,m:11,d:23,h:10,min:0}
+];
+function u4Left(t){
+  const pad=n=>String(n).padStart(2,"0"),count=(n,w)=>({big:n,unit:n===1?w:w+"s"});
+  const s=Math.floor((new Date(t.y,t.m-1,t.d,t.h,t.min)-Date.now())/1000);
+  if(s<=0)return null;
+  const d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),sec=pad(s%60);
+  if(d)return{...count(d,"day"),clock:`${h}h ${pad(m)}m ${sec}s`};
+  if(h)return{...count(h,"hour"),clock:`${pad(m)}m ${sec}s`};
+  return{...count(m,"minute"),clock:`${sec}s`};
+}
+const u4Num=v=>`<b>${v.big}</b> ${v.unit}`;
+function u4When(t){
+  const at=new Date(t.y,t.m-1,t.d,t.h,t.min);
+  return`<span>${at.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})},</span> <span>${at.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"})}</span>`;
+}
+function u4Rows(){
+  return U4_TEST.map((t,i)=>{const v=u4Left(t);return v?`<span class="tc-row" data-i="${i}"><span class="tc-who">${t.who}</span><span class="tc-n">${u4Num(v)}</span><span class="tc-clock">${v.clock}</span><span class="tc-when">${u4When(t)}</span></span>`:""}).join("");
+}
+function tickU4(){
+  if(document.hidden)return;
+  let over=false;
+  $$(".tc-row").forEach(r=>{const v=u4Left(U4_TEST[+r.dataset.i]);if(!v){over=true;return}$(".tc-n",r).innerHTML=u4Num(v);$(".tc-clock",r).textContent=v.clock});
+  if(over){paintU4Test();renderPoster()}
+}
+function paintU4Test(){
+  const rows=u4Rows();let b=$("#u4Test");
+  if(!rows){if(b)b.remove();return}
+  if(!b){b=document.createElement("button");b.id="u4Test";b.type="button";b.className="tcard";b.onclick=()=>go("guide",4);$(".cta").after(b)}
+  b.innerHTML=`<span class="tc-h">Unit 4 assessment</span><span class="tc-rows">${rows}</span>`;
+}
 
 let view=VIEW_NAME[S.view]?S.view:"guide",unit=Number.isInteger(S.unit)?S.unit:1,topic="all";
 let seed=0,onlyMissed=false,onlyLearning=false,cardI=0,flipped=false,flipDeg=0,flipAnim=null,askReset=false;
@@ -177,7 +213,8 @@ function renderPoster(){
   const vids=scopeUnits().flatMap(unitVideos);
   const data=(view==="guide"?[`<b>${u.w}</b> of the exam`,plural(u.topics.length,"topic")]:view==="videos"?[`<b>${vids.length}</b> videos`,runtime(vids)]:view==="practice"?[`<b>${q}</b> questions`]:view==="cards"?[`<b>${c}</b> cards`]:[`<b>${f}</b> prompts`]);
   if(u&&view!=="guide")data.unshift(`<b>${VIEW_NAME[view]}</b>`);
-  p.innerHTML=`<div class="poster-in"><h2>${title}</h2><div class="poster-row"><div class="poster-data">${data.map(d=>`<span>${d}</span>`).join("")}</div>${u?`<div class="poster-scale"><i></i><span><b>${esc(u.scale)}</b> ${esc(u.scaleOf)}</span></div>`:""}</div></div>`;
+  const test=unit===4?u4Rows():"";
+  p.innerHTML=`<div class="poster-in"><h2>${title}</h2>${test?`<div class="poster-test"><span class="tc-h">Unit 4 assessment</span><span class="tc-rows">${test}</span></div>`:""}<div class="poster-row"><div class="poster-data">${data.map(d=>`<span>${d}</span>`).join("")}</div>${u?`<div class="poster-scale"><i></i><span><b>${esc(u.scale)}</b> ${esc(u.scaleOf)}</span></div>`:""}</div></div>`;
 }
 function posterIn(){
   if(!G||still)return;
@@ -471,6 +508,7 @@ function buildIntro(){
   $("#ctaExam").onclick=()=>go("exam");
   const days=Math.ceil((new Date(2027,4,3,8)-Date.now())/864e5);
   $("#countdown").textContent=days>0?`${days} days until the exam on May 3, 2027`:"";
+  paintU4Test();
   $("#strip").innerHTML=UNITS.map(u=>`<button class="sbtn" type="button" data-u="${u.n}" style="--sc:var(--u${u.n})"><small>Unit ${u.n}</small>${esc(u.short)}</button>`).join("")+`<button class="sbtn" type="button" data-u="0"><small>66 Qs</small>Final exam</button>`;
   $$(".sbtn").forEach(b=>{
     const n=+b.dataset.u;
@@ -519,7 +557,7 @@ function heroIn(){
   const tl=G.timeline({defaults:{ease:"power3.out"}})
    .from("h1 .ln>span",{yPercent:105,duration:.8,stagger:.08})
    .from("#lede",{y:14,opacity:0,duration:.5},.35)
-   .from(".cta",{y:14,opacity:0,duration:.5,clearProps:"all"},.45)
+   .from(".cta,#u4Test",{y:14,opacity:0,duration:.5,clearProps:"all"},.45)
    .from("#strip",{y:28,opacity:0,duration:.6,clearProps:"all"},.5);
   setTimeout(()=>tl.progress(1),1500); // a hidden frame gets no animation ticks, so never leave the headline parked
 }
@@ -533,6 +571,7 @@ buildIntro();
 const first=parseHash(location.hash);
 try{history.scrollRestoration="manual"}catch(e){}
 addEventListener("load",()=>{if(ST)ST.refresh()});
+setInterval(tickU4,1000);
 addEventListener("hashchange",()=>{const r=parseHash(location.hash);if(r&&(r.v!==view||(r.u!==undefined&&r.u!==unit)))go(r.v,r.u)});
 let booted=false;
 document.addEventListener("DOMContentLoaded",boot);
